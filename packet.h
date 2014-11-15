@@ -142,6 +142,7 @@ u_int	 ssh_packet_get_maxsize(struct ssh *);
 
 /* for forced packet rekeying post auth */
 void	 packet_request_rekeying(void);
+int	 packet_authentication_state(const struct ssh *);
 
 int	 ssh_packet_get_state(struct ssh *, struct sshbuf *);
 int	 ssh_packet_set_state(struct ssh *, struct sshbuf *);
