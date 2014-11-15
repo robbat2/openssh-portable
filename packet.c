@@ -2377,6 +2377,14 @@ ssh_packet_send_ignore(struct ssh *ssh, int nbytes)
 	}
 }
 
+int
+packet_authentication_state(const struct ssh *ssh)
+{
+	struct session_state *state = ssh->state;
+
+	return state->after_authentication;
+}
+
 void
 ssh_packet_set_rekey_limits(struct ssh *ssh, u_int64_t bytes, time_t seconds)
 {
