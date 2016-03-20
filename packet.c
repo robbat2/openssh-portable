@@ -1037,6 +1037,14 @@ ssh_set_newkeys(struct ssh *ssh, int mode)
 	return 0;
 }
 
+/* Force a rekey */
+static int rekey_requested = 0;
+void
+packet_request_rekeying(void)
+{
+	rekey_requested = 1;
+}
+
 #define MAX_PACKETS	(1U<<31)
 static int
 ssh_packet_need_rekeying(struct ssh *ssh, u_int outbound_packet_len)
@@ -1055,6 +1063,12 @@ ssh_packet_need_rekeying(struct ssh *ssh, u_int outbound_packet_len)
 	/* Peer can't rekey */
 	if (ssh->compat & SSH_BUG_NOREKEY)
 		return 0;
+
+	/* Forcing a rekey */
+	if (rekey_requested == 1) {
+		rekey_requested = 0;
+		return 1;
+	}
 
 	/*
 	 * Permit one packet in or out per rekey - this allows us to
